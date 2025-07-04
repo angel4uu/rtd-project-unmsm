@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  freepbx:
+    image: tiredofit/freepbx
+    container_name: freepbx
+    restart: always
+    ports:
+      - "80:80" # Web UI (HTTP)
+      - "443:443" # Web UI (HTTPS)
+      - "5060:5060/udp" # SIP (UDP)
+      - "5160:5160/udp" # SIP (PJSIP)
+      - "18000-18100:18000-18100/udp" # RTP media ports
+    environment:
+      - VIRTUAL_HOST=pbx.local
+      - RTP_START=18000
+      - RTP_FINISH=18100
+      - UPGRADE=false
+    volumes:
+      - freepbx_data:/var/lib/mysql
+      - freepbx_asterisk:/var/lib/asterisk
+      - freepbx_logs:/var/log/asterisk
+      - freepbx_config:/etc/asterisk
+
+volumes:
+  freepbx_data:
+  freepbx_asterisk:
+  freepbx_logs:
+  freepbx_config:
